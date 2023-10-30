@@ -56,7 +56,11 @@
 
                 if(word.Contains(guess))
                 {
-
+                        Console.WriteLine(word.Length);
+                        displayWord = displayWord.Substring(0, word.IndexOf(guess)) + guess + displayWord.Substring(word.IndexOf(guess) + 1);
+                        Console.WriteLine(displayWord);
+                        Console.ReadLine();
+                        word.IndexOf(guess);
                 }
                 else
                 {
