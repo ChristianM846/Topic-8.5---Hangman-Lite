@@ -9,6 +9,7 @@
             bool match, done;
             match = false;
             done = false;
+            displayWord = "";
             incorrect = 0;
             List<string> lettersGuessed = new List<string>();
             List<string> wordList = new List<string>() { "COMPUTER", "PANCAKES", "SMILE", "ENTERTAINMENT", "AVATAR", "GAMING" };
@@ -16,18 +17,21 @@
             
             Console.WriteLine("I want to play a game");
             Console.WriteLine("A game of hangman to be exact");
-            Console.WriteLine($"You know the rules: There is a secret word, in this case {word.Length} letters long, and you must guess one letter at a time to figure it out");
+            Console.WriteLine($"You know the rules: There is a secret word, and you must guess one letter at a time to figure it out");
             Console.WriteLine("Unlike normal hangman, you only get three wrong guesses before you lose. Let's begin");
 
             while (!done)
             {
-                word = wordList[gnerator.Next(0,7)]
+                word = wordList[generator.Next(0, 6)];
                 tempLength = word.Length;
 
                 foreach (char letter in word)
                 {
                     displayWord += "_";
                 }
+
+                incorrect = 0;
+                match = false;
 
                 while (incorrect < 3 && match == false)
                 {
@@ -104,7 +108,7 @@
 
                 if (match)
                 {
-                    Console.WriteLine($"Congratulations, you found the word!");
+                    Console.WriteLine($"Congratulations, you found the word. It was {word}!");
                 }
                 else if (incorrect == 3)
                 {
@@ -121,11 +125,16 @@
                     response = Console.ReadLine().ToUpper().Trim();
                 }
 
-                if (response = "YES")
+                if (response == "YES")
                 {
                     Console.WriteLine("Okay, let's do it! Press ENTER to continue.");
                     Console.ReadLine();
                     Console.Clear();
+                }
+                else if(response == "NO")
+                {
+                    Console.WriteLine("Okay, I hope you enjoyed playing. Goodbye!");
+                    done = true;
                 }
 
             }
