@@ -4,69 +4,126 @@
     {
         static void Main(string[] args)
         {
-            string word, displayWord, guess;
-            int incorrect;
-            bool match = false;
-            List<string> lettersGuessed = new List<string>();
-
-            word = "COMPUTER";
-            displayWord = "________";
+            string word, displayWord, guess, response;
+            int incorrect, tempLength;
+            bool match, done;
+            match = false;
+            done = false;
             incorrect = 0;
-
+            List<string> lettersGuessed = new List<string>();
+            List<string> wordList = new List<string>() { "COMPUTER", "PANCAKES", "SMILE", "ENTERTAINMENT", "AVATAR", "GAMING" };
+            Random generator = new Random();            
+            
             Console.WriteLine("I want to play a game");
             Console.WriteLine("A game of hangman to be exact");
             Console.WriteLine($"You know the rules: There is a secret word, in this case {word.Length} letters long, and you must guess one letter at a time to figure it out");
             Console.WriteLine("Unlike normal hangman, you only get three wrong guesses before you lose. Let's begin");
 
-            while (incorrect < 3 && match == false)
+            while (!done)
             {
-                if(incorrect == 0)
+                word = wordList[gnerator.Next(0,7)]
+                tempLength = word.Length;
+
+                foreach (char letter in word)
                 {
-                    NoIncorrect();
-                }
-                else if (incorrect == 1)
-                {
-                    OneIncorrect();
-                }
-                else if(incorrect == 2)
-                {
-                    TwoIncorrect();
+                    displayWord += "_";
                 }
 
-                Console.WriteLine($"Current known letters: {displayWord}");
-                Console.WriteLine();
-                Console.WriteLine("Current guessed letters:");
-
-                foreach (string letter in lettersGuessed)
+                while (incorrect < 3 && match == false)
                 {
-                    Console.Write(letter + ", ");
-                }
+                    if(incorrect == 0)
+                    {
+                        NoIncorrect();
+                    }
+                    else if (incorrect == 1)
+                    {
+                        OneIncorrect();
+                    }
+                    else if(incorrect == 2)
+                    {
+                        TwoIncorrect();
+                    }
 
-                Console.WriteLine();
-                Console.WriteLine($"You have {3 - incorrect} incorrect guesses left");
-                Console.WriteLine();
-                Console.WriteLine("What letter would you like to guess:");
-                guess = Console.ReadLine().ToUpper().Trim();
-                
-                while (guess.Length > 1 || lettersGuessed.Contains(guess))
-                {
-                    Console.WriteLine("I'm sorry, please restrict your guesses to one character at a time and esure you haven't already guessed it");
+                    Console.WriteLine($"Current known letters: {displayWord}");
+                    Console.WriteLine();
+                    Console.WriteLine("Current guessed letters:");
+
+                    foreach (string letter in lettersGuessed)
+                    {
+                        Console.Write(letter + ", ");
+                    }
+
+                    Console.WriteLine();
+                    Console.WriteLine($"You have {3 - incorrect} incorrect guesses left");
+                    Console.WriteLine();
+                    Console.WriteLine("What letter would you like to guess:");
                     guess = Console.ReadLine().ToUpper().Trim();
+                    Console.Beep();
+                
+                    while (guess.Length > 1 || lettersGuessed.Contains(guess))
+                    {
+                        Console.WriteLine("I'm sorry, please restrict your guesses to one character at a time and esure you haven't already guessed it");
+                        guess = Console.ReadLine().ToUpper().Trim();
+                        Console.Beep();
+                    }
+
+                    if(word.Contains(guess))
+                    {
+                    
+                        for (int i = 0; i < tempLength; i++)
+                        {
+                            if (word[i] == guess[0])
+                            {
+                                displayWord = displayWord.Remove(i, 1);
+                                displayWord = displayWord.Insert(i, guess);
+                            }
+                        }
+                        Console.WriteLine(displayWord);
+                        lettersGuessed.Add(guess);
+                        Console.WriteLine("Press ENTER to continue");
+                        Console.ReadLine();
+                        Console.Beep();
+                        Console.Clear();
+
+                        if (word == displayWord)
+                        {
+                            match = true;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"The letter {guess} is not contained within the word.");
+                        incorrect++;
+                        lettersGuessed.Add(guess);
+                        Console.WriteLine("Press ENTER to continue");
+                        Console.ReadLine();
+                        Console.Beep();
+                        Console.Clear();
+                    }
                 }
 
-                if(word.Contains(guess))
+                if (match)
                 {
-                        Console.WriteLine(word.Length);
-                        displayWord = displayWord.Substring(0, word.IndexOf(guess)) + guess + displayWord.Substring(word.IndexOf(guess) + 1);
-                        Console.WriteLine(displayWord);
-                        Console.ReadLine();
-                        word.IndexOf(guess);
+                    Console.WriteLine($"Congratulations, you found the word!");
                 }
-                else
+                else if (incorrect == 3)
                 {
-                    Console.WriteLine($"The letter {guess} is not contained within the word.");
-                    incorrect++;
-                    lettersGuessed.Add(guess);
+                    ThreeIncorrect();
+                    Console.WriteLine($"Too bad, you weren't able to find the word. The word this time around was {word}");
+                }
+
+                Console.WriteLine("Would you like to play again? (Yes or No)");
+                response = Console.ReadLine().ToUpper().Trim();
+                
+                while (response != "YES" &&  response != "NO")
+                {
+                    Console.WriteLine("That's not a valid response. Yes or No please.");
+                    response = Console.ReadLine().ToUpper().Trim();
+                }
+
+                if (response = "YES")
+                {
+                    Console.WriteLine("Okay, let's do it! Press ENTER to continue.");
                     Console.ReadLine();
                     Console.Clear();
                 }
