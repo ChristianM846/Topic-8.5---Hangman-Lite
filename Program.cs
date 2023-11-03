@@ -24,6 +24,12 @@
             {
                 word = wordList[generator.Next(0, 6)];
                 tempLength = word.Length;
+                displayWord = "";
+
+                while (lettersGuessed.Count > 0)
+                {
+                    lettersGuessed.RemoveAt(lettersGuessed.Count - 1);
+                }
 
                 foreach (char letter in word)
                 {
@@ -64,7 +70,7 @@
                     guess = Console.ReadLine().ToUpper().Trim();
                     Console.Beep();
                 
-                    while (guess.Length > 1 || lettersGuessed.Contains(guess))
+                    while ( guess == "" || guess.Length > 1 || lettersGuessed.Contains(guess))
                     {
                         Console.WriteLine("I'm sorry, please restrict your guesses to one character at a time and esure you haven't already guessed it");
                         guess = Console.ReadLine().ToUpper().Trim();
